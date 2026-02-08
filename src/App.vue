@@ -1,11 +1,20 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-const recipient = ref('')
-const currentGreeting = ref('點擊下方按鈕生成吉祥話！')
-const selectedCategory = ref('general')
+interface GreetingsData {
+  [key: string]: string[];
+}
 
-const greetings = {
+interface Category {
+  id: string;
+  name: string;
+}
+
+const recipient = ref<string>('')
+const currentGreeting = ref<string>('點擊下方按鈕生成吉祥話！')
+const selectedCategory = ref<string>('general')
+
+const greetings: GreetingsData = {
   general: [
     '祝您新年快樂，萬事如意！',
     '恭喜發財，紅包拿來！',
@@ -36,7 +45,7 @@ const greetings = {
   ]
 }
 
-const generateGreeting = () => {
+const generateGreeting = (): void => {
   const categoryGreetings = greetings[selectedCategory.value]
   const randomIndex = Math.floor(Math.random() * categoryGreetings.length)
   let text = categoryGreetings[randomIndex]
@@ -48,7 +57,7 @@ const generateGreeting = () => {
   currentGreeting.value = text
 }
 
-const copyToClipboard = async () => {
+const copyToClipboard = async (): Promise<void> => {
   try {
     await navigator.clipboard.writeText(currentGreeting.value)
     alert('已複製到剪貼簿！')
@@ -57,7 +66,7 @@ const copyToClipboard = async () => {
   }
 }
 
-const categories = [
+const categories: Category[] = [
   { id: 'general', name: '通用祝福' },
   { id: 'wealth', name: '財源廣進' },
   { id: 'health', name: '身體健康' },
